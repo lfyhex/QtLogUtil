@@ -13,8 +13,7 @@ DEFINES += QTLOGUTIL_LIBRARY
 
 SOURCES += qtlogutil.cpp
 
-HEADERS += qtlogutil.h\
-        qtlogutil_global.h
+HEADERS += qtlogutil.h
 
 unix {
     target.path = /usr/lib

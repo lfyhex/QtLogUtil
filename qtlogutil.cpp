@@ -5,9 +5,11 @@
 #include <QVector>
 #include <QTextCodec>
 
-QtLogUtil *QtLogUtil::m_pInstance = NULL;
 static QTextStream m_text;
 static QVector<QString> g_vctLevel;
+static QFile m_logFile;
+static QString m_strPath;
+static QString m_strName;
 
 void logMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -31,41 +33,12 @@ void logMessageHandler(QtMsgType type, const QMessageLogContext &context, const 
     m_text.flush();
 }
 
-
-QtLogUtil::QtLogUtil()
+bool setLogFile(const QString &strPath, const QString &strName)
 {
     if (g_vctLevel.count() == 0)
     {
         g_vctLevel << "[DEBUG]" << "[WARN]" << "[CRIT]" << "[FATAL]" << "[INFO]";
     }
-}
-
-QtLogUtil::~QtLogUtil()
-{
-    m_text.reset();
-    m_logFile.close();
-}
-
-QtLogUtil* QtLogUtil::instance()
-{
-    if (!m_pInstance)
-    {
-        m_pInstance = new QtLogUtil;
-    }
-    return m_pInstance;
-}
-
-void QtLogUtil::release()
-{
-    if (m_pInstance)
-    {
-        delete m_pInstance;
-        m_pInstance = NULL;
-    }
-}
-
-bool QtLogUtil::setLogFile(const QString &strPath, const QString &strName)
-{
     m_strPath = strPath;
     m_strName = strName;
     if (QDir(strPath).exists() && !strName.isEmpty())
